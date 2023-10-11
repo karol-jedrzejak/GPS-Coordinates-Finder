@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <link rel="shortcut icon" href="resources/icon.png" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="public/styles.css" />
+
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""
+    ></script>
+
+    <title>Znajdź Współrzędne GPS</title>
+  </head>
+
+  <body>
+    <!-- Logos -->
+    <header>
+      <div
+        class="d-flex flex-row justify-content-center align-items-center my-2"
+      >
+        <img
+          src="resources/icon.png"
+          alt="Round picture of world."
+          width="150"
+          height="150"
+        />
+        <h1 class="text-body-emphasis display-3">
+          Znajdź Współrzędne <span class="fw-bold">GPS</span>
+        </h1>
+      </div>
+    </header>
+
+    <main>
+      <!-- Form -->
+
+      <form class="container" action="companies_edit.php" method="post">
+        <div class="row">
+          <div class="mb-3 col-8">
+            <label for="adressStreet" class="form-label">Ulica</label>
+            <input type="text" class="form-control" id="adressStreet"
+            name="adressStreet"'>
+          </div>
+          <div class="mb-3 col-4">
+            <label for="adressNubmers" class="form-label">Numer</label>
+            <div class="input-group" id="adressNubmers">
+              <input
+                type="text"
+                class="form-control"
+                id="adressNumber"
+                name="adressNumber"
+                required
+              />
+              <span class="input-group-text">/</span>
+              <input
+                type="text"
+                class="form-control"
+                id="adressSubNumber"
+                name="adressSubNumber"
+              />
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-lg-5">
+            <label for="adressCity" class="form-label">Miejscowość</label>
+            <input
+              type="text"
+              class="form-control"
+              id="adressCity"
+              name="adressCity"
+              required
+            />
+          </div>
+          <div class="mb-3 col-4 col-lg-2">
+            <label for="adressPostCode" class="form-label">Kod Pocztowy</label>
+            <input
+              type="text"
+              class="form-control"
+              id="adressPostCode"
+              name="adressPostCode"
+              required
+            />
+          </div>
+          <div class="mb-3 col-8 col-lg-5">
+            <label for="adressPostOffice" class="form-label"
+              >Poczta/Gmina/Okręg</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="adressPostOffice"
+              name="adressPostOffice"
+              required
+            />
+          </div>
+          <div class="mb-3 col-12">
+            <label for="country" class="form-label">Kraj</label>
+            <input
+              type="text"
+              class="form-control"
+              id="country"
+              name="country"
+              required
+            />
+          </div>
+          <div class="mb-3 col-6 col-lg-6">
+            <label for="coordinateNS" class="form-label"
+              >Dł. Geograficzna</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="coordinateNS"
+              name="coordinateNS"
+              readonly
+            />
+          </div>
+          <div class="mb-3 col-6 col-lg-6">
+            <label for="coordinateWE" class="form-label"
+              >Sz. Geograficzna</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="coordinateWE"
+              name="coordinateWE"
+              readonly
+            />
+          </div>
+          <div class="mb-3 col-6 col-lg-6">
+            <label for="gpsNS" class="form-label">GPS Długość</label>
+            <input
+              type="text"
+              class="form-control"
+              id="gpsNS"
+              name="gpsNS"
+              readonly
+            />
+          </div>
+          <div class="mb-3 col-6 col-lg-6">
+            <label for="gpsWE" class="form-label">GPS Szerokość</label>
+            <input
+              type="text"
+              class="form-control"
+              id="gpsWE"
+              name="gpsWE"
+              readonly
+            />
+          </div>
+          <div class="col-12 mb-3 text-center flex">
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="findCoordinates();"
+            >
+              Wyszukaj po adresie
+            </button>
+            <span class="mx-4">lub kliknij w mapkę poniżej :)</span>
+          </div>
+          <!-- Leaflet Map -->
+          <div id="mapcontainer" class="col-12 text-center mx-auto mb-3">
+            <div
+              class="map leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
+              id="map"
+            ></div>
+            <script src="scripts/leaflet.js"></script>
+          </div>
+        </div>
+      </form>
+    </main>
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"
+          >created by Karol Jędrzejak -
+          <a href="mailto:karol.jedrzejak@gmail.com" target="_blank" class=""
+            >karol.jedrzejak@gmail.com</a
+          ></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>
