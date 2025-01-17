@@ -1,6 +1,6 @@
 # GPS Coordinates Finder
  
- <img src="https://karol-jedrzejak.github.io/static/media/7.d4bc98b6d4d3a897dc9d.jpg" height="400">
+ <img src="https://karol-jedrzejak.github.io/static/media/5.677b5da7938d8a15a64f.jpg" height="400">
 
 ## About Project
 
